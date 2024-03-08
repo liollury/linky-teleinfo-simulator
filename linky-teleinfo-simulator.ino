@@ -3,13 +3,36 @@
  *   Simulateur de trames de teleinfo (Compteur Linky)
  * ==========================================================================
  * + Simule des trames teleinfo en mode Historique
+ * + Choix de l'option tarifaire à simuler
  * + Donne des valeurs aléatoire pour les données IINST & PAPP
- * + Incrémente BASE
+ * + Incrémente BASE / HCHC / HCHP / EJPHN / EJPHPM / BBRHCJB / BBRHPJB / BBRHCJW / BBRHPJW / BBRHCJR / BBRHPJR
  */
-int currentBase = 10000;
+
+// Option tarifaire choisie pour la simulation des trames
+// Valeurs possibles:
+//   + BASE: Option classique
+//   + HC..: Option Heure Pleine / Heure Creuse
+//   + EJP.: Option EJP
+//   + BBRx: Option Tempo
+#define optionTarifaireConfig "BASE"
 
 // Passer à TRUE pour debugger les trames
 #define debug false
+
+long currentBASE = 10000;
+
+long currentHCHC = 20000;
+long currentHCHP = 10000;
+
+long currentEJPHN = 20000;
+long currentEJPHPM = 10000;
+
+long currentBBRHCJB = 20000;
+long currentBBRHPJB = 10000;
+long currentBBRHCJW = 20000;
+long currentBBRHPJW = 10000;
+long currentBBRHCJR = 20000;
+long currentBBRHPJR = 10000;
 
 void setup() {
   if (!debug) {
@@ -20,15 +43,18 @@ void setup() {
 }
 
 void loop() {
-  writeFrame();
+  writeFrame(optionTarifaireConfig);
 
   delay(1000);
 }
 
 /**
+ * Ecrit une trame télé-information pour l'option tarifaire choisie
  * Une trame est un groupe de données qui commence par un caractère STX (Start of Text) et fini par un caractère ETX (End of Text)
+ *
+ * @param optionTarifaire Option tarifaire choisie. BASE / HC.. / EJP. / BBRx
  */
-void writeFrame() {
+void writeFrame(String optionTarifaire) {
   #define START_OF_TEXT 0x02
   #define END_OF_TEXT 0x03
 
@@ -39,17 +65,98 @@ void writeFrame() {
   writeData("ADCO", "123456789012");
 
   // Option tarifaire choisie // Caractères: 4
-  writeData("OPTARIF", "BASE");
+  writeData("OPTARIF", optionTarifaire);
 
   // Intensité souscrite // Caractères: 2 / Unité: A
   writeData("ISOUSC", "30");
 
-  // Consommation totale // Caractères: 9 / Unité: Wh
-  currentBase += 1000;
-  writeData("BASE", prefixInt(currentBase, 9, "0"));
+  String ptec = "";
+  
+  // Option Base
+  if (optionTarifaire == "BASE") {
+    // TH..: Toutes les Heures
+    ptec = "TH..";
+
+    // Consommation totale // Caractères: 9 / Unité: Wh
+    currentBASE += 1000;
+    writeData("BASE", prefixInt(currentBASE, 9, "0"));
+
+  // Option Heure Pleine / Heure Creuse
+  } else if (optionTarifaire == "HC..") {
+    // HC..: Heures Creuses
+    // HP..: Heures Pleines
+    ptec = "HC..";
+
+    // HHPHC: Horaire Heures Pleines Heures Creuses (Lettre qui définie la plage horaire souscrite dans le contrat) // Caractères: 1
+    writeData("HHPHC", "A");
+
+    // Heures Creuses // Caractères: 9 / Unité: Wh
+    currentHCHC += 1000;
+    writeData("HCHC", prefixInt(currentHCHC, 9, "0"));
+
+    // Heures Pleines // Caractères: 9 / Unité: Wh
+    currentHCHP += 1000;
+    writeData("HCHP", prefixInt(currentHCHP, 9, "0"));
+
+  // Option EJP
+  } else if (optionTarifaire == "EJP.") {
+    // HN..: Heures Normales
+    // PM..: Heures de Pointe Mobile
+    ptec = "HN..";
+
+    // Heures Normales // Caractères: 9 / Unité: Wh
+    currentEJPHN += 1000;
+    writeData("EJPHN", prefixInt(currentEJPHN, 9, "0"));
+
+    // Heures de Pointe Mobile // Caractères: 9 / Unité: Wh
+    currentEJPHPM += 1000;
+    writeData("EJPHPM", prefixInt(currentEJPHPM, 9, "0"));
+
+    // Préavis Début EJP (30 min) // Caractères: 2 / Unité: min
+    int pejp = random(1, 60);
+    writeData("PEJP", prefixInt(pejp, 2, "0"));
+
+  // Option Tempo
+  } else if (optionTarifaire == "BBRx") {
+    // HCJB: Heures Creuses Jours Bleus
+    // HCJW: Heures Creuses Jours Blancs
+    // HCJR: Heures Creuses Jours Rouges
+    // HPJB: Heures Pleines Jours Bleus
+    // HPJW: Heures Pleines Jours Blancs
+    // HPJR: Heures Pleines Jours Rouges
+    ptec = "HCJB";
+
+    // Heures Creuses Jours Bleus // Caractères: 9 / Unité: Wh
+    currentBBRHCJB += 1000;
+    writeData("BBRHCJB", prefixInt(currentBBRHCJB, 9, "0"));
+
+    // Heures Pleines Jours Bleus // Caractères: 9 / Unité: Wh
+    currentBBRHPJB += 1000;
+    writeData("BBRHPJB", prefixInt(currentBBRHPJB, 9, "0"));
+
+    // Heures Creuses Jours Blancs // Caractères: 9 / Unité: Wh
+    currentBBRHCJW += 1000;
+    writeData("BBRHCJW", prefixInt(currentBBRHCJW, 9, "0"));
+
+    // Heures Pleines Jours Blancs // Caractères: 9 / Unité: Wh
+    currentBBRHPJW += 1000;
+    writeData("BBRHPJW", prefixInt(currentBBRHPJW, 9, "0"));
+
+    // Heures Creuses Jours Rouges // Caractères: 9 / Unité: Wh
+    currentBBRHCJR += 1000;
+    writeData("BBRHCJR", prefixInt(currentBBRHCJR, 9, "0"));
+
+    // Heures Pleines Jours Rouges // Caractères: 9 / Unité: Wh
+    currentBBRHPJR += 1000;
+    writeData("BBRHPJR", prefixInt(currentBBRHPJR, 9, "0"));
+
+    // + DEMAIN: Couleur du lendemain (BLEU / BLAN / ROUG) // Caractères: 4
+    writeData("DEMAIN", "BLEU");
+
+  }
 
   // Période Tarifaire en cours // Caractères: 4 
-  writeData("PTEC", "TH..");
+  writeData("PTEC", ptec);
 
   // Intensité Instantanée // Caractères: 3 / Unité: A
   int iinst = random(1, 20);
@@ -65,21 +172,8 @@ void writeFrame() {
   // Mot d'état du compteur / Caractères: 6
   writeData("MOTDETAT", "000000");
 
-  // Autres donées pouvant être ajoutée en fonction du compteur:
-  // + HCHC: Heures Creuses // Caractères: 9 / Unité: Wh
-  // + HCHP: Heures Pleines // Caractères: 9 / Unité: Wh
-  // + EJPHN: Heures Normales // Caractères: 9 / Unité: Wh
-  // + EJPHPM: Heures de Pointe Mobile // Caractères: 9 / Unité: Wh
-  // + BBRHCJB: Heures Creuses Jours Bleus // Caractères: 9 / Unité: Wh
-  // + BBRHPJB: Heures Pleines Jours Bleus // Caractères: 9 / Unité: Wh
-  // + BBRHCJW: Heures Creuses Jours Blancs // Caractères: 9 / Unité: Wh
-  // + BBRHPJW: Heures Pleines Jours Blancs // Caractères: 9 / Unité: Wh
-  // + BBRHCJR: Heures Creuses Jours Rouges // Caractères: 9 / Unité: Wh
-  // + BBRHPJR: Heures Pleines Jours Rouges // Caractères: 9 / Unité: Wh
-  // + PEJP: Préavis Début EJP (30 min) // Caractères: 2 / Unité: min
-  // + DEMAIN: Couleur du lendemain // Caractères: 4
-  // + ADPS: Avertissement de Dépassement De Puissance Souscrite // Caractères: 3 / Unité: A
-  // + HHPHC: Horaire Heures Pleines Heures Creuses // Caractères: 1
+  // Avertissement de Dépassement De Puissance Souscrite // Caractères: 3 / Unité: A
+  writeData("ADPS", "100");
 
   // Fin de la trame
   Serial.write(END_OF_TEXT);
@@ -93,6 +187,9 @@ void writeFrame() {
  *
  * Exemple
  * <LF>ADCO<SP>123456789012<SP>P<CR>
+ * 
+ * @param label Etiquette de la ligne
+ * @param data Donnée de la ligne
  */
 void writeData(String label, String data) {
   #define LF 0x0A
@@ -115,6 +212,9 @@ void writeData(String label, String data) {
  *   => Dans le cas du mode standard, il faut ajouter le délimiteur entre les champs "Donnée" et "Checksum"
  * + tronque la somme déduite (S1) sur 6 bits
  * + ajoute "0x20" au résultat de la somme précédente
+ *
+ * @param label Etiquette de la ligne
+ * @param data Donnée de la ligne
  */
 char getChecksum(String label, String data) {
   int labelLength = label.length() + 1;

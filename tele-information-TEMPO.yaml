@@ -1,0 +1,143 @@
+# --------------------------------------------------------------
+# ESPHome - Tele-information
+# --------------------------------------------------------------
+# esphome run tele-information.yaml
+
+
+esphome:
+  name: tele-information
+  friendly_name: Télé-information
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+  level: DEBUG
+  logs:
+    uart: ERROR
+
+uart:
+  id: uart_bus
+  rx_pin: GPIO21
+  tx_pin: GPIO17
+  baud_rate: 1200
+  parity: EVEN
+  data_bits: 7
+
+teleinfo:
+  id: teleinformation
+  update_interval: 5s
+  historical_mode: true
+
+sensor:
+  - platform: teleinfo
+    tag_name: "ISOUSC"
+    id: isousc
+    name: "Intensité souscrite (ISOUSC)"
+    unit_of_measurement: A
+    teleinfo_id: teleinformation
+    state_class: measurement
+    device_class: current
+  - platform: teleinfo
+    tag_name: "BBRHCJB"
+    name: "Heures Creuses Jours Bleus (BBRHCJB)"
+    unit_of_measurement: "kWh"
+    teleinfo_id: teleinformation
+    accuracy_decimals: 3
+    state_class: total_increasing
+    device_class: energy
+    filters:
+      - multiply: 0.001
+  - platform: teleinfo
+    tag_name: "BBRHPJB"
+    name: "Heures Pleines Jours Bleus (BBRHPJB)"
+    unit_of_measurement: "kWh"
+    teleinfo_id: teleinformation
+    accuracy_decimals: 3
+    state_class: total_increasing
+    device_class: energy
+    filters:
+      - multiply: 0.001
+  - platform: teleinfo
+    tag_name: "BBRHCJW"
+    name: "Heures Creuses Jours Blancs (BBRHCJW)"
+    unit_of_measurement: "kWh"
+    teleinfo_id: teleinformation
+    accuracy_decimals: 3
+    state_class: total_increasing
+    device_class: energy
+    filters:
+      - multiply: 0.001
+  - platform: teleinfo
+    tag_name: "BBRHPJW"
+    name: "Heures Pleines Jours Blancs (BBRHPJW)"
+    unit_of_measurement: "kWh"
+    teleinfo_id: teleinformation
+    accuracy_decimals: 3
+    state_class: total_increasing
+    device_class: energy
+    filters:
+      - multiply: 0.001
+  - platform: teleinfo
+    tag_name: "BBRHCJR"
+    name: "Heures Creuses Jours Rouges (BBRHCJR)"
+    unit_of_measurement: "kWh"
+    teleinfo_id: teleinformation
+    accuracy_decimals: 3
+    state_class: total_increasing
+    device_class: energy
+    filters:
+      - multiply: 0.001
+  - platform: teleinfo
+    tag_name: "BBRHPJR"
+    name: "Heures Pleines Jours Rouges (BBRHPJR)"
+    unit_of_measurement: "kWh"
+    teleinfo_id: teleinformation
+    accuracy_decimals: 3
+    state_class: total_increasing
+    device_class: energy
+    filters:
+      - multiply: 0.001
+  - platform: teleinfo
+    tag_name: "IINST"
+    id: iinst
+    name: "Intensité instantanée (IINST)"
+    unit_of_measurement: A
+    teleinfo_id: teleinformation
+    state_class: measurement
+    device_class: current
+    accuracy_decimals: 2
+  - platform: teleinfo
+    tag_name: "IMAX"
+    id: imax
+    name: "Intensité maximale appelée (IMAX)"
+    unit_of_measurement: A
+    teleinfo_id: teleinformation
+    state_class: measurement
+    device_class: current
+    accuracy_decimals: 2
+  - platform: teleinfo
+    tag_name: "PAPP"
+    name: "Puissance apparente (PAPP)"
+    unit_of_measurement: "W"
+    teleinfo_id: teleinformation
+    accuracy_decimals: 0
+    state_class: measurement
+    device_class: power
+
+text_sensor:
+  - platform: teleinfo
+    tag_name: "ADCO"
+    name: "Adresse du compteur (ADCO)"
+    teleinfo_id: teleinformation
+  - platform: teleinfo
+    tag_name: "OPTARIF"
+    name: "Option tarifaire choisie (OPTARIF)"
+    teleinfo_id: teleinformation
+  - platform: teleinfo
+    tag_name: "DEMAIN"
+    name: "Couleur du lendemain (DEMAIN)"
+    teleinfo_id: teleinformation
