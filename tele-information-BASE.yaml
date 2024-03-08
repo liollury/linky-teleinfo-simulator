@@ -1,12 +1,13 @@
 # --------------------------------------------------------------
 # ESPHome - Tele-information
 # --------------------------------------------------------------
-# esphome run tele-information.yaml
-
+# Option tarifaire: BASE
+#
+# esphome run tele-information-BASE.yaml
 
 esphome:
-  name: tele-information
-  friendly_name: Télé-information
+  name: tele-information-base
+  friendly_name: Télé-information BASE
 
 esp32:
   board: esp32dev

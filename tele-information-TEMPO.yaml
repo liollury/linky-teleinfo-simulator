@@ -1,12 +1,13 @@
 # --------------------------------------------------------------
 # ESPHome - Tele-information
 # --------------------------------------------------------------
-# esphome run tele-information.yaml
-
+# Option tarifaire: Tempo
+#
+# esphome run tele-information-TEMPO.yaml
 
 esphome:
-  name: tele-information
-  friendly_name: Télé-information
+  name: tele-information-tempo
+  friendly_name: Télé-information Tempo
 
 esp32:
   board: esp32dev

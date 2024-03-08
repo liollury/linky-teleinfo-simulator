@@ -1,12 +1,13 @@
 # --------------------------------------------------------------
 # ESPHome - Tele-information
 # --------------------------------------------------------------
-# esphome run tele-information.yaml
-
+# Option tarifaire: EJP
+#
+# esphome run tele-information-EJP.yaml
 
 esphome:
-  name: tele-information
-  friendly_name: Télé-information
+  name: tele-information-ejp
+  friendly_name: Télé-information EJP
 
 esp32:
   board: esp32dev
