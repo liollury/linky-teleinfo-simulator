@@ -78,7 +78,7 @@ void writeFrame(String optionTarifaire) {
     ptec = "TH..";
 
     // Consommation totale // Caractères: 9 / Unité: Wh
-    currentBASE += 1000;
+    currentBASE += random(100, 2000);
     writeData("BASE", prefixInt(currentBASE, 9, "0"));
 
   // Option Heure Pleine / Heure Creuse
@@ -91,7 +91,7 @@ void writeFrame(String optionTarifaire) {
     writeData("HHPHC", "A");
 
     // Heures Creuses // Caractères: 9 / Unité: Wh
-    currentHCHC += 1000;
+    currentHCHC += random(100, 2000);
     writeData("HCHC", prefixInt(currentHCHC, 9, "0"));
 
     // Heures Pleines // Caractères: 9 / Unité: Wh
@@ -105,11 +105,11 @@ void writeFrame(String optionTarifaire) {
     ptec = "HN..";
 
     // Heures Normales // Caractères: 9 / Unité: Wh
-    currentEJPHN += 1000;
+    currentEJPHN += random(100, 2000);
     writeData("EJPHN", prefixInt(currentEJPHN, 9, "0"));
 
     // Heures de Pointe Mobile // Caractères: 9 / Unité: Wh
-    currentEJPHPM += 1000;
+    currentEJPHPM += random(100, 2000);
     writeData("EJPHPM", prefixInt(currentEJPHPM, 9, "0"));
 
     // Préavis Début EJP (30 min) // Caractères: 2 / Unité: min
@@ -127,27 +127,27 @@ void writeFrame(String optionTarifaire) {
     ptec = "HCJB";
 
     // Heures Creuses Jours Bleus // Caractères: 9 / Unité: Wh
-    currentBBRHCJB += 1000;
+    currentBBRHCJB += random(100, 2000);
     writeData("BBRHCJB", prefixInt(currentBBRHCJB, 9, "0"));
 
     // Heures Pleines Jours Bleus // Caractères: 9 / Unité: Wh
-    currentBBRHPJB += 1000;
+    currentBBRHPJB += random(100, 2000);
     writeData("BBRHPJB", prefixInt(currentBBRHPJB, 9, "0"));
 
     // Heures Creuses Jours Blancs // Caractères: 9 / Unité: Wh
-    currentBBRHCJW += 1000;
+    currentBBRHCJW += random(100, 2000);
     writeData("BBRHCJW", prefixInt(currentBBRHCJW, 9, "0"));
 
     // Heures Pleines Jours Blancs // Caractères: 9 / Unité: Wh
-    currentBBRHPJW += 1000;
+    currentBBRHPJW += random(100, 2000);
     writeData("BBRHPJW", prefixInt(currentBBRHPJW, 9, "0"));
 
     // Heures Creuses Jours Rouges // Caractères: 9 / Unité: Wh
-    currentBBRHCJR += 1000;
+    currentBBRHCJR += random(100, 2000);
     writeData("BBRHCJR", prefixInt(currentBBRHCJR, 9, "0"));
 
     // Heures Pleines Jours Rouges // Caractères: 9 / Unité: Wh
-    currentBBRHPJR += 1000;
+    currentBBRHPJR += random(100, 2000);
     writeData("BBRHPJR", prefixInt(currentBBRHPJR, 9, "0"));
 
     // + DEMAIN: Couleur du lendemain (BLEU / BLAN / ROUG) // Caractères: 4

@@ -11,7 +11,7 @@ Choisir l'option tarifaire à simuler en modifier la variable **optionTarifaireC
 Compiler les sources du fichier [linky-teleinfo-simulator.ino](linky-teleinfo-simulator.ino) sur une carte Arduino.
 
 Celle-ci va simuler des trames télé-info et envoyer des valeurs aléatoires pour les données suivantes:
-* **BASE** / **HCHC** / **HCHP** / **EJPHN** / **EJPHPM** / **BBRHCJB** / **BBRHPJB** / **BBRHCJW** / **BBRHPJW** / **BBRHCJR** / **BBRHPJR**: **+1kWh** par tour de boucle
+* **BASE** / **HCHC** / **HCHP** / **EJPHN** / **EJPHPM** / **BBRHCJB** / **BBRHPJB** / **BBRHCJW** / **BBRHPJW** / **BBRHCJR** / **BBRHPJR**: **+100W à 2000W** par tour de boucle
 * **IINST**: valeur aléatoire entre **1** et **20** **A**
 * **PAPP**: valeur aléatoire entre **200** et **4000** **VA**
 
