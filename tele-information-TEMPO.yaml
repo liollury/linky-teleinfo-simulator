@@ -20,6 +20,25 @@ logger:
   logs:
     uart: ERROR
 
+wifi:
+  ssid: "SSID"
+  password: "SSID_PASSWORD"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Téléinfo Fallback Hotspot"
+    password: "sEy9m3EuGqQc"
+
+# Web Server: https://esphome.io/components/web_server.html
+web_server:
+  local: true
+  port: 80
+  auth:
+    username: "admin"
+    password: "admin"
+  # Turn on or off the log feature inside webserver
+  log: true
+
 uart:
   id: uart_bus
   rx_pin: GPIO21
@@ -137,6 +156,10 @@ text_sensor:
   - platform: teleinfo
     tag_name: "OPTARIF"
     name: "Option tarifaire choisie (OPTARIF)"
+    teleinfo_id: teleinformation
+  - platform: teleinfo
+    tag_name: "PTEC"
+    name: "Période Tarifaire en cours (PTEC)"
     teleinfo_id: teleinformation
   - platform: teleinfo
     tag_name: "DEMAIN"

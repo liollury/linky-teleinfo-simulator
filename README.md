@@ -17,7 +17,7 @@ Celle-ci va simuler des trames télé-info et envoyer des valeurs aléatoires po
 
 ## ESP Home
 
-Un fichier d'exemple pour lire les trames de télé-information sur un ESP32 à l'aide d'[ESPHome](https://esphome.io/index.html) est founi.
+Un fichier d'exemple pour lire les trames de télé-information sur un ESP32 à l'aide d'[ESPHome](https://esphome.io/index.html) est fourni.
 
 Choisir le fichier de configuration en fonction de son option tarifaire:
 * **Base**: [tele-information-BASE.yaml](tele-information-BASE.yaml)
@@ -28,3 +28,21 @@ Choisir le fichier de configuration en fonction de son option tarifaire:
 ```sh
 esphome run tele-information-BASE.yaml
 ```
+
+### Serveur Web
+
+Un serveur web est accessible à l'adresse IP de votre esp32. Pour que cela fonctionne, il faut configurer le WiFi dans le fichier ESPHome utilisé:
+
+```yaml
+wifi:
+  # A MODIFIER dans le fichier yaml
+  ssid: "SSID"
+  # A MODIFIER dans le fichier yaml
+  password: "SSID_PASSWORD"
+```
+
+### Home Assistant
+
+Il est aussi possible de brancher ESPHome avec Home Assistant pour traiter les informations de manière plus avancée:
+
+https://esphome.io/guides/getting_started_hassio.html
