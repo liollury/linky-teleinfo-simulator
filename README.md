@@ -46,3 +46,9 @@ wifi:
 Il est aussi possible de brancher ESPHome avec Home Assistant pour traiter les informations de manière plus avancée:
 
 https://esphome.io/guides/getting_started_hassio.html
+
+## Liste de courses
+
+Liste des équipements à acheter pour réaliser le montage de télé-info
+
+[Lien vers la liste de courses](docs/SHOPPING_LIST.md)
