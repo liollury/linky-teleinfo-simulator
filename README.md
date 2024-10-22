@@ -15,15 +15,19 @@ Celle-ci va simuler des trames télé-info et envoyer des valeurs aléatoires po
 * **IINST**: valeur aléatoire entre **1** et **20** **A**
 * **PAPP**: valeur aléatoire entre **200** et **4000** **VA**
 
+## Montage télé-information
+
+[Lien](./docs/MONTAGE.md)
+
 ## ESP Home
 
 Un fichier d'exemple pour lire les trames de télé-information sur un ESP32 à l'aide d'[ESPHome](https://esphome.io/index.html) est fourni.
 
 Choisir le fichier de configuration en fonction de son option tarifaire:
-* **Base**: [tele-information-BASE.yaml](tele-information-BASE.yaml)
-* **Heure Pleine / Heure Creuse**: [tele-information-HPHC.yaml](tele-information-HPHC.yaml)
-* **EJP**: [tele-information-EJP.yaml](tele-information-EJP.yaml)
-* **Tempo**: [tele-information-TEMPO.yaml](tele-information-TEMPO.yaml)
+* **Base**: [tele-information-BASE.yaml](esphome/tele-information-BASE.yaml)
+* **Heure Pleine / Heure Creuse**: [tele-information-HPHC.yaml](esphome/tele-information-HPHC.yaml)
+* **EJP**: [tele-information-EJP.yaml](esphome/tele-information-EJP.yaml)
+* **Tempo**: [tele-information-TEMPO.yaml](esphome/tele-information-TEMPO.yaml)
 
 ```sh
 esphome run tele-information-BASE.yaml
