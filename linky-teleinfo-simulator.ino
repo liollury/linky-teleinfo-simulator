@@ -14,10 +14,17 @@
 //   + HC..: Option Heure Pleine / Heure Creuse
 //   + EJP.: Option EJP
 //   + BBRx: Option Tempo
-#define optionTarifaireConfig "BASE"
+String optionTarifaireConfig = "BASE";
 
 // Passer à TRUE pour debugger les trames
 #define debug false
+
+#define PIN_BASE 5
+#define PIN_HC 7
+#define PIN_EJP 8
+#define PIN_BBRX 10
+#define PIN_BRIDGE_1 6
+#define PIN_BRIDGE_2 9
 
 long currentBASE = 10000;
 
@@ -40,12 +47,49 @@ void setup() {
   } else {
     Serial.begin(1200);
   }
+
+  // Bridges
+  pinMode(PIN_BRIDGE_1, OUTPUT);
+  pinMode(PIN_BRIDGE_2, OUTPUT);
+  digitalWrite(PIN_BRIDGE_1, LOW);
+  digitalWrite(PIN_BRIDGE_2, LOW);
+
+  // Options tarifaire
+  pinMode(PIN_BASE, INPUT_PULLUP);
+  pinMode(PIN_HC, INPUT_PULLUP);
+  pinMode(PIN_EJP, INPUT_PULLUP);
+  pinMode(PIN_BBRX, INPUT_PULLUP);
 }
 
 void loop() {
+  // Commenter et modifier "optionTarifaireConfig" ligne 17 pour ne rendre configurable à la volée
+  selectOptionTarifaire();
+
   writeFrame(optionTarifaireConfig);
 
   delay(1000);
+}
+
+/**
+ * En fonction de l'utilisation de certaines PIN de l'Arduino, on vient configurer l'option tarifaire en cours
+ * L'objectif est de permettre le changement rapide vers l'une ou l'autre des options tarifaire, sans avoir à recompiler le code
+ *
+ * PS: pour faire un pont, il suffit de relier les 2 PIN indiquées à l'aide d'un câble
+ */
+void selectOptionTarifaire() {
+  // Si pont entre la PIN_BASE et la PIN_BRIDGE_1, active l'option classique
+  if (digitalRead(PIN_BASE) == LOW) {
+    optionTarifaireConfig = "BASE";
+  // Si pont entre la PIN_HC et la PIN_BRIDGE_1, active l'option Heure Pleine / Heure Creuse
+  } else if (digitalRead(PIN_HC) == LOW) {
+    optionTarifaireConfig = "HC..";
+  // Si pont entre la PIN_EJP et la PIN_BRIDGE_2, active l'option EJP
+  } else if (digitalRead(PIN_EJP) == LOW) {
+    optionTarifaireConfig = "EJP.";
+  // Si pont entre la PIN_BBRX et la PIN_BRIDGE_2, active l'option Tempo
+  } else if (digitalRead(PIN_BBRX) == LOW) {
+    optionTarifaireConfig = "BBRx";
+  }
 }
 
 /**
@@ -71,7 +115,7 @@ void writeFrame(String optionTarifaire) {
   writeData("ISOUSC", "30");
 
   String ptec = "";
-  
+
   // Option Base
   if (optionTarifaire == "BASE") {
     // TH..: Toutes les Heures
@@ -152,10 +196,9 @@ void writeFrame(String optionTarifaire) {
 
     // + DEMAIN: Couleur du lendemain (BLEU / BLAN / ROUG) // Caractères: 4
     writeData("DEMAIN", "BLEU");
-
   }
 
-  // Période Tarifaire en cours // Caractères: 4 
+  // Période Tarifaire en cours // Caractères: 4
   writeData("PTEC", ptec);
 
   // Intensité Instantanée // Caractères: 3 / Unité: A
@@ -226,12 +269,12 @@ char getChecksum(String label, String data) {
   data.toCharArray(dataChar, dataLength);
 
   // Calculate checksum
-  char line[strlen(labelChar)+strlen(dataChar)+1];
+  char line[strlen(labelChar) + strlen(dataChar) + 1];
   strcpy(line, labelChar);
   strcat(line, " ");
   strcat(line, dataChar);
   char checksum = 0;
-  for(int i = 0; i < strlen(line); i++ ) {
+  for (int i = 0; i < strlen(line); i++) {
     char c = line[i];
     checksum += c;
   }
